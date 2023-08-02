@@ -1,4 +1,7 @@
 #include "main.h"
+int print_rev(char *s);
+int print_str(char *str);
+int handle_S(char *str);
 
 /**
  * _printf - printing whatever is given as an input GIGO
@@ -103,5 +106,96 @@ int _printf(const char *format, ...)
 	else
 		return (-1);
 
+	return (count);
+}
+
+/**
+ * print_str - print the string
+ * @str: string to be printed
+ *
+ * Return: number of characters printed
+ */
+int print_str(char *str)
+{
+	unsigned long int j, count = 0;
+
+	if (str)
+	{
+		for (j = 0; j < strlen(str); j++)
+		{
+			putchar(str[j]);
+			count += 1;
+		}
+	}
+	else
+	{
+		str = "(null)";
+		for (j = 0; j < strlen(str); j++)
+		{
+			putchar(str[j]);
+			count += 1;
+		}
+	}
+
+	return (count);
+}
+
+/**
+ * handle_S - prints the string
+ * @str: string to be printed
+ *
+ * Return: number of characters printed
+ */
+int handle_S(char *str)
+{
+	int i, count = 0;
+
+	if (str == NULL)
+		return (-1);
+
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		if ((str[i] > 0 && str[i] < 32) || str[i] >= 127)
+		{
+			putchar('\\');
+			putchar('x');
+			count += 2;
+			count += printf("%02X", str[i]);
+		}
+		else
+		{
+			putchar(str[i]);
+			count += 1;
+		}
+	}
+
+	return (count);
+}
+
+/**
+ * print_rev - prints a string, in reverse
+ * @s: the string
+ *
+ * Return: void
+ */
+int print_rev(char *s)
+{
+	int i, count = 0;
+
+	if (s)
+	{
+		i = 0;
+		while (s[i] != '\0')
+		{
+			i++;
+		}
+		i--;
+		while (i >= 0)
+		{
+			putchar(s[i]);
+			count += 1;
+			i--;
+		}
+	}
 	return (count);
 }
