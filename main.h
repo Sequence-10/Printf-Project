@@ -8,5 +8,7 @@
 
 int _printf(const char *format, ...);
 int _putchar(char c);
+int process_flag(char specifer, va_list args);
+int is_flag(char specifier, char percent);
 
 #endif
