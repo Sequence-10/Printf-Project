@@ -37,7 +37,7 @@ int _printf(const char *format, ...)
 				}
 				else if (format[i] == 'b')
 				{
-					unsigned int n = va_arg(list, unsigned int);
+					unsigned int n = va_arg(args, unsigned int);
 					int bits = 0;
 					unsigned int mask = 1;
 
