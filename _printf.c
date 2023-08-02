@@ -1,4 +1,7 @@
 #include "main.h"
+int print_rev(char *s);
+int print_str(char *str);
+int handle_S(char *str);
 
 /**
  * _printf - printing whatever is given as an input GIGO

@@ -12,8 +12,4 @@ int _putchar(char c);
 int _puts(char *string);
 int _puts_digit(int num);
 int _print_address(va_list args);
-int print_rev(char *s);
-int print_str(char *str);
-int handle_S(char *str);
-
 #endif
