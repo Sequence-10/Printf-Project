@@ -1,7 +1,4 @@
 #include "main.h"
-int print_rev(char *s);
-int print_str(char *str);
-int handle_S(char *str);
 
 /**
  * _printf - printing whatever is given as an input GIGO
@@ -11,100 +8,42 @@ int handle_S(char *str);
 
 int _printf(const char *format, ...)
 {
-	char *str;
-	unsigned long int i, count = 0;
+	found_match member[] = {
+		{"%s", _print_string}, {"%c", print_char}, {"%%", print_percent},
+		{"%i", print_number}, {"%d", print_number}, {"%b", _printbinary},
+		{"%u", print_unsigned}, {"%o", print_octal}, {"%x", print_hex_lower},
+		{"%X", print_hex_upper}, {"%S", handle_S_conversion}, {"%p", _print_address},
+		{"%r", str_rev}, {"%R", print_rot13}
+	};
 	va_list args;
+	int i = 0, j, count = 0, match = 0;
 
 	va_start(args, format);
-	if (format)
-	{
-		for (i = 0; i < strlen(format); i++)
-		{
-			if (format[i] == '%')
-			{
-				i++;
-				if (format[i] == 'c')
-				{
-					putchar(va_arg(args, int));
-					count += 1;
-				}
-				else if (format[i] == 's')
-				{
-					str = va_arg(args, char *);
-					count += print_str(str);
-				}
-				else if (format[i] == '%')
-				{
-					putchar('%');
-					count += 1;
-				}
-				else if (format[i] == 'b')
-				{
-					unsigned int n = va_arg(args, unsigned int);
-					int bits = 0;
-					unsigned int mask = 1;
 
-					while (mask <= n)
-					{
-						bits++;
-						mask <<= 1;
-					}
-					if (bits == 0)
-					{
-						putchar('0');
-					}
-					else
-					{
-						mask >>= 1;
-						while (mask)
-						{
-							putchar((n & mask) ? '1' : '0');
-							mask >>= 1;
-						}
-					}
-				}
-				else if (format[i] == 'd' || format[i] == 'i')
-					count += printf("%d", va_arg(args, int));
-				else if (format[i] == 'u')
-					count += printf("%u", va_arg(args, int));
-				else if (format[i] == 'o')
-					count += printf("%o", va_arg(args, int));
-				else if (format[i] == 'x')
-					count += printf("%x", va_arg(args, int));
-				else if (format[i] == 'X')
-					count += printf("%X", va_arg(args, int));
-				else if (format[i] == 'p')
-					count += printf("%p", va_arg(args, void *));
-				else if (format[i] == 'S')
-				{
-					str = va_arg(args, char *);
-					count += handle_S(str);
-				}
-				else if(format[i] == 'r')
-				{
-					str = va_arg(args, char *);
-					count += print_rev(str);
-				}
-				else if (format[i] == '\0')
-					return (-1);
-
-				else
-				{
-					putchar(format[i - 1]);
-					putchar(format[i]);
-					count += 2;
-				}
-			}
-			else
-			{
-				putchar(format[i]);
-				count += 1;
-			}
-		}
-		va_end(args);
-	}
-	else
+	if ((format == NULL) || (format[0] == '%' && format[1] == '\0'))
 		return (-1);
-
+	while (format[i] != '\0')
+	{
+		match = 0;
+		j = 13;
+		while (j >= 0)
+		{
+			if (member[j].op[0] == format[i] && member[j].op[1] == format[i + 1])
+			{
+				count += member[j].f(args);
+				i = i + 2;
+				match = 1;
+				break;
+			}
+			j--;
+		}
+		if (!match)
+		{
+			_putchar(format[i]);
+			count++;
+			i++;
+		}
+	}
+	va_end(args);
 	return (count);
 }
